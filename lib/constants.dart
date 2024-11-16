@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 
 class Constants {
-  final primaryColor = const Color.fromRGBO(35, 12, 15, 1);
-  final secondaryColor = const Color.fromRGBO(234, 214, 55, 1);
+
 
   final adminUsername = const Text("admin");
   final adminPassword = const Text("admin");
+
+}
+
+class AppColors {
+  static const Color backgroundColor = Color.fromRGBO(255, 255, 255, 1.0);
+  static const Color primaryColor = Color.fromRGBO(255, 132, 149, 1.0);
+  static const Color textColor = Colors.white;
+  static const Color textColorDark = Color.fromRGBO(37, 15, 16, 1.0);
 
 }
