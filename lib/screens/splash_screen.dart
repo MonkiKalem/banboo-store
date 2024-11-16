@@ -15,7 +15,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 4),() {
-      Navigator.pushReplacement(
+      Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => OnboardingScreen()));
       },);
@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
-            color: AppColors.textColor
+            color: AppColors.textColorDark
           ),
 
         ),

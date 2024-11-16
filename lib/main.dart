@@ -1,3 +1,4 @@
+import 'package:banboostore/constants.dart';
 import 'package:banboostore/pages/login_page.dart';
 import 'package:banboostore/pages/register_page.dart';
 import 'package:banboostore/screens/splash_screen.dart';
@@ -16,7 +17,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Banboo Store',
       theme: ThemeData(
-        textTheme: GoogleFonts.poppinsTextTheme(),
+        textTheme: GoogleFonts.poppinsTextTheme() ,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: AppColors.backgroundColor,
+          centerTitle: true,
+        ),
       ),
       home: const SplashScreen(),
       routes: {

@@ -1,6 +1,7 @@
 import 'package:banboostore/components/login_button.dart';
 import 'package:banboostore/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +18,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
+  // google login
   Future<User?> signInWithGoogle() async {
     try {
 
@@ -34,8 +36,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         idToken: googleAuth.idToken,
       );
 
-      final UserCredential userCredential =
-      await FirebaseAuth.instance.signInWithCredential(credential);
+      final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
 
       return userCredential.user;
     } catch (e) {
@@ -90,15 +91,19 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Login username
+
                       LoginButton(
                         icon: const FaIcon(FontAwesomeIcons.user, color: Colors.black,),
                         text: "Login with Username",
                         backgroundColor: AppColors.primaryColor,
                         textColor: AppColors.textColor,
-                        onPressed: signInWithGoogle,
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/login');
+                        },
                       ),
+
                       const SizedBox(height: 10,),
+
                       // Login Google
                       LoginButton(
                           icon: const FaIcon(FontAwesomeIcons.google, color: Colors.black,),
@@ -108,13 +113,16 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           onPressed: signInWithGoogle,
                       ),
                       const SizedBox(height: 10,),
+
                       // Login Facebook
                       LoginButton(
                         icon: const FaIcon(FontAwesomeIcons.facebook, color: Colors.black,),
                         text: "Login with Facebook",
                         backgroundColor: AppColors.primaryColor,
                         textColor: AppColors.textColor,
-                        onPressed: signInWithGoogle,
+                        onPressed: () {
+
+                        },
                       ),
 
                     ],
