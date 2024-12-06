@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,7 +14,9 @@ class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController(); // Updated from username
   final _passwordController = TextEditingController();
   bool _passwordIsObscured = true;
+
   bool _isLoading = false;
+  bool _rememberMe = false;
 
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
@@ -33,6 +36,9 @@ class _LoginPageState extends State<LoginPage> {
         SnackBar(content: Text("Welcome ${response['user']['name']}!")),
       );
 
+      // Save login data if "Remember Me" is checked
+      await _saveLoginData();
+
       // Navigate to the home or dashboard screen
       Navigator.pushReplacementNamed(context, '/home');
     } catch (e) {
@@ -43,6 +49,20 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _isLoading = false;
       });
+    }
+  }
+
+  // Save login data for future sessions
+  Future<void> _saveLoginData() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (_rememberMe) {
+      prefs.setString('email', _emailController.text);
+      prefs.setString('password', _passwordController.text);
+      prefs.setBool('rememberMe', _rememberMe);
+    } else {
+      prefs.remove('email');
+      prefs.remove('password');
+      prefs.remove('rememberMe');
     }
   }
 
@@ -125,8 +145,22 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             // Login button
+            Row(
+              children: [
+                Checkbox(
+                  value: _rememberMe,
+                  onChanged: (value) {
+                    setState(() {
+                      _rememberMe = value! ;
+                    });
+                  },
+                ),
+                const Text("Remember Me")
+              ],
+            ),
+            const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _isLoading ? null : _login,
               style: ElevatedButton.styleFrom(
