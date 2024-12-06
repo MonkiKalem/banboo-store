@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "284630597299",
+    "project_id": "flutteriot-f3c35",
+    "storage_bucket": "flutteriot-f3c35.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284630597299:android:f7233bbec306c0741ebac6",
+        "android_client_info": {
+          "package_name": "com.sunib.flameshield"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284630597299-6v6i0opcvbaj7jd1dnsgs523k580sav4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1K1EKwHeC19uLrhgPTkQoId-MlczwYlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284630597299-6v6i0opcvbaj7jd1dnsgs523k580sav4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:284630597299:android:4a531bdee07795741ebac6",
+        "android_client_info": {
+          "package_name": "com.zzz.banboostore"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "284630597299-6v6i0opcvbaj7jd1dnsgs523k580sav4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1K1EKwHeC19uLrhgPTkQoId-MlczwYlU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "284630597299-6v6i0opcvbaj7jd1dnsgs523k580sav4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

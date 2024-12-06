@@ -1,9 +1,7 @@
 import 'package:banboostore/components/login_button.dart';
 import 'package:banboostore/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -21,11 +19,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   // google login
   Future<User?> signInWithGoogle() async {
     try {
-
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
 
       if (googleUser == null) {
         // User canceled the sign-in
+        print("Google Sign-in canceled.");
         return null;
       }
 
@@ -37,11 +35,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       );
 
       final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-
+      print("User signed in: ${userCredential.user?.displayName}");
       return userCredential.user;
     } catch (e) {
       print("Error signing in with Google: $e");
       return null;
+    }
+  }
+
+  void onLoginHandler(BuildContext context) async {
+    try {
+      User? user = await signInWithGoogle();
+
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Google sign-in canceleed or failed')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Login failed: $e')),
+      );
     }
   }
 
@@ -57,9 +73,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 const SizedBox(height: 64,),
-                Container(
+                const SizedBox(
                   width: double.infinity,
-                  child: const Column(
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text("Welcome to",
@@ -110,7 +126,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           text: "Login with Google",
                           backgroundColor: AppColors.primaryColor,
                           textColor: AppColors.textColor,
-                          onPressed: signInWithGoogle,
+                          onPressed: () => onLoginHandler(context),
                       ),
                       const SizedBox(height: 10,),
 
