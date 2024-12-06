@@ -33,12 +33,25 @@ dependencies:
 
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
-  #sign_in_button: ^3.2.0
   font_awesome_flutter: ^10.8.0
+
+  # grid
+  flutter_layout_grid: ^2.0.7
+
+
   firebase_auth: ^5.3.3
   google_sign_in: ^6.2.2
   flutter_facebook_auth: ^7.1.1
-  http: ^1.1.0 #for api
+
+  #for api url
+  http: ^1.1.0
+
+  #for login saved
+  shared_preferences: ^2.3.3
+
+  #carausel dependencies
+  carousel_slider: ^5.0.0
+  cached_network_image: ^3.4.1
 
 
 dev_dependencies:

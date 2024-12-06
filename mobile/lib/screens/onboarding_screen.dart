@@ -1,9 +1,10 @@
-import 'package:banboostore/components/login_button.dart';
+import 'package:banboostore/widgets/login_button.dart';
 import 'package:banboostore/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class OnboardingScreen extends StatefulWidget {
@@ -15,6 +16,24 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final GoogleSignIn googleSignIn = GoogleSignIn();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _loadLoginData();
+  }
+
+  Future<void> _loadLoginData() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedEmail = prefs.getString('email');
+    final savedPassword = prefs.getString('password');
+    final savedRememberMe = prefs.getBool('rememberMe') ?? false;
+
+    if (savedRememberMe) {
+      Navigator.pushReplacementNamed(context, "/home");
+    }
+  }
 
   // google login
   Future<User?> signInWithGoogle() async {
