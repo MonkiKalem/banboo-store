@@ -1,3 +1,4 @@
+import 'package:banboostore/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,7 +16,7 @@ class LoginButton extends StatelessWidget {
     return ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
+          backgroundColor: AppColors.secondaryColor,
           elevation: 2,
           maximumSize: const Size(345, 65),
           minimumSize: const Size(200, 50),
@@ -31,10 +32,10 @@ class LoginButton extends StatelessWidget {
             Expanded(
               child: Text(
                 text,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: textColor
+                  color: AppColors.textColorDark
                 ),
               ),
             )

@@ -3,8 +3,8 @@ import 'package:banboostore/widgets/banboo_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
-import '../pages/banboo_detail_page.dart';
-import '../pages/banboo_detail_popup.dart';
+import '../../pages/banboo_detail_page.dart';
+import '../../pages/banboo_detail_popup.dart';
 
 class ItemCardLayoutGrid extends StatelessWidget {
   const ItemCardLayoutGrid({

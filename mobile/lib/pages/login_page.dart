@@ -1,3 +1,4 @@
+import 'package:banboostore/model/banboo.dart';
 import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,6 +19,13 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   bool _rememberMe = false;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+  }
+
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -28,16 +36,13 @@ class _LoginPageState extends State<LoginPage> {
     try {
       // Call login API
       final response = await ApiService.login(
-        _emailController.text, // Use email
+        _emailController.text,
         _passwordController.text,
       );
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Welcome ${response['user']['name']}!")),
       );
-
-      // Save login data if "Remember Me" is checked
-      await _saveLoginData();
 
       // Navigate to the home or dashboard screen
       Navigator.pushReplacementNamed(context, '/home');
@@ -49,20 +54,6 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _isLoading = false;
       });
-    }
-  }
-
-  // Save login data for future sessions
-  Future<void> _saveLoginData() async {
-    final prefs = await SharedPreferences.getInstance();
-    if (_rememberMe) {
-      prefs.setString('email', _emailController.text);
-      prefs.setString('password', _passwordController.text);
-      prefs.setBool('rememberMe', _rememberMe);
-    } else {
-      prefs.remove('email');
-      prefs.remove('password');
-      prefs.remove('rememberMe');
     }
   }
 
@@ -146,20 +137,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             const SizedBox(height: 16),
+
             // Login button
-            Row(
-              children: [
-                Checkbox(
-                  value: _rememberMe,
-                  onChanged: (value) {
-                    setState(() {
-                      _rememberMe = value! ;
-                    });
-                  },
-                ),
-                const Text("Remember Me")
-              ],
-            ),
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: _isLoading ? null : _login,

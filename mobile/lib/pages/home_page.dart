@@ -1,9 +1,15 @@
 import 'package:banboostore/constants.dart';
+import 'package:banboostore/pages/cart_page.dart';
+import 'package:banboostore/pages/profile_page.dart';
+import 'package:banboostore/screens/onboarding_screen.dart';
+import 'package:banboostore/services/api_service.dart';
 import 'package:banboostore/widgets/banboo_card.dart';
-import 'package:banboostore/widgets/item_card_layout_grid.dart';
+import 'package:banboostore/widgets/layout/item_card_layout_grid.dart';
+import 'package:banboostore/widgets/layout/item_card_layout_staggered_grid.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
@@ -19,12 +25,19 @@ class HomePage extends StatefulWidget {
 // https://fastcdn.hoyoverse.com/content-v2/nap/114225/608830bc6382b73079821aed7b19fda8_8240430244310614598.jpg
 
 class _HomePageState extends State<HomePage> {
+  final List<Widget> _pages = [
+    HomePage(), // Page for Home
+    CartPage(), // Page for Cart
+    ProfilePage(), // Page for Profile
+  ];
+
+
   final List<String> imgList = [
-    'https://fastcdn.hoyoverse.com/content-v2/nap/114225/d9664f1281ca4dc8d057cbafb4df7ca9_754884677841569119.jpg',
-    'https://fastcdn.hoyoverse.com/content-v2/nap/114225/4ed7c3aa0b3cfb401bbcf5668451d38d_8346342171453271705.jpg',
-    'https://fastcdn.hoyoverse.com/content-v2/nap/114225/517ed14b0416a53dd26bf616cd405bcc_6750749868894820993.jpg',
-    'https://fastcdn.hoyoverse.com/content-v2/nap/114225/608830bc6382b73079821aed7b19fda8_8240430244310614598.jpg',
-    'https://fastcdn.hoyoverse.com/content-v2/nap/114225/f500f9d765b46ade79f922b67edc8d94_615087537866440042.jpg',
+    'https://upload-os-bbs.hoyolab.com/upload/2023/11/14/369285726/28dc5c0e5c42688897d715128fa56f6f_2636221330479257776.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
+    'https://upload-os-bbs.hoyolab.com/upload/2023/11/14/369285726/8fe0f2b73ade440b14e9d03f85b65737_8292970554535359034.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
+    'https://upload-os-bbs.hoyolab.com/upload/2023/11/15/369285726/269eeb2766426c210e356a04bf927a69_4370142326493041399.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
+    'https://upload-os-bbs.hoyolab.com/upload/2024/07/14/369285726/50a1512638206da7680d2db0924f136f_478926785863762848.png?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
+    'https://upload-os-bbs.hoyolab.com/upload/2024/07/16/369285726/355f02a46b33e37ab95ff37165924889_862749925127952124.png?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
   ];
 
   List<Banboo> banbooList = [
@@ -60,95 +73,117 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.backgroundGreyColor,
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
+      backgroundColor: AppColors.backgroundGreyColor,
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return <Widget>[
+            SliverAppBar(
                 automaticallyImplyLeading: false,
                 expandedHeight: 300.0,
-
                 collapsedHeight: 70,
                 floating: false,
                 pinned: true,
                 stretch: true,
-                backgroundColor: AppColors.primaryColor,
+                backgroundColor: AppColors.backgroundDarkColor,
                 leading: IconButton(
-                  icon: const Icon(Icons.menu),
-                  onPressed: () => {},
+                  icon: const Icon(Icons.home),
+                  onPressed: () {
+                  },
                 ),
-                actions: const [
-                  Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: FaIcon(FontAwesomeIcons.cartShopping),
-                  )
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.logout),
+                    onPressed: () async {
+                      await ApiService.logout();
+                      Navigator.pushReplacementNamed(context, "/onboarding");
+                    },
+                  ),
                 ],
                 flexibleSpace: FlexibleSpaceBar(
-                    centerTitle: true,
-                    collapseMode: CollapseMode.parallax,
-                    title: const Text("Banboo Store",
-                        style: TextStyle(
+                  centerTitle: true,
+                  collapseMode: CollapseMode.parallax,
+                  title: const Text("Banboo Store",
+                      style: TextStyle(
                           color: Colors.white,
                           fontSize: 16.0,
-                          fontWeight: FontWeight.bold
-                        )),
-                    background: Image.network(
-                      "https://fastcdn.hoyoverse.com/content-v2/nap/102370/39e68a14404891ba2e8f27c57e95ad46_4516017444439496819.png",
-                      fit: BoxFit.cover,
-                    )),
-              ),
-            ];
-          },
-          body: SingleChildScrollView(
-            child: Column(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(vertical: 12),
-                  color: AppColors.primaryColor,
-                  child: CarouselSlider(
-                    options: CarouselOptions(
-                      height: 200.0,
-                      autoPlay: true,
-                      enlargeCenterPage: false,
-                      aspectRatio: 16 / 9,
-                      viewportFraction: 0.9,
+                          fontWeight: FontWeight.bold)),
+                  background: Stack(children: [
+                    SizedBox(
+                      height: double.infinity,
+                      width: double.infinity,
+                      child: CachedNetworkImage(
+                        imageUrl:
+                            "https://upload-os-bbs.hoyolab.com/upload/2023/11/15/369285726/fe6f361715d2e479c9333aa4eb56debd_5228699759752292298.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70",
+                        fit: BoxFit.cover,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                      ),
                     ),
-                    items: imgList.map((item) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            Colors.black.withOpacity(0.5),
+                            Colors.transparent,
+                          ],
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
                         ),
-                        child: Center(
-                          child: CachedNetworkImage(
-                            imageUrl: item,
-                            placeholder: (context, url) =>
-                                const CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(
-                  height: 16,
-                ),
-                const Text("Banboo List",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold
-                    )),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: ItemCardLayoutGrid(crossAxisCount: 2, banboos: banbooList),
-                ),
+                      ),
+                    ),
+                  ]),
+                )),
+          ];
+        },
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              // caraousel images
+              Container(
 
-              ],
-            ),
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                color: AppColors.secondaryColor,
+                child: CarouselSlider(
+                  options: CarouselOptions(
+                    height: 200.0,
+                    autoPlay: true,
+                    enlargeCenterPage: true,
+                    aspectRatio: 16 / 9,
+                    viewportFraction: 0.8,
+                  ),
+                  items: imgList.map((item) {
+                    return ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: CachedNetworkImage(
+                        imageUrl: item,
+                        placeholder: (context, url) =>
+                            const CircularProgressIndicator(),
+                        errorWidget: (context, url, error) =>
+                            const Icon(Icons.error),
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              const Text("Banboo List",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold)),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child:
+                    ItemCardLayoutGrid(crossAxisCount: 2, banboos: banbooList),
+              ),
+            ],
           ),
-        ));
+        ),
+      ),
+
+    );
   }
 }
