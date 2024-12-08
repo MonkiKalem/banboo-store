@@ -110,6 +110,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           // BACKGROUND IMAGE
           Container(
             height: double.infinity,
+            width: double.infinity,
             child: CachedNetworkImage(
               imageUrl:"https://fastcdn.hoyoverse.com/content-v2/nap/102026/37198ce9c5ee13abb2c49f1bd1c3ca97_7846165079824928446.png",
               placeholder: (context, url) =>
@@ -127,125 +128,127 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           ),
 
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
 
-              const SizedBox(height: 64,),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 16),
-                child: const Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Welcome to our",
-                      style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 28,
-                          color: AppColors.textColor
-                      ),),
-                    Text("Banboo Store",
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 48,
-                          color: AppColors.textColor
-                      ),),
-                    Divider(),
-                    SizedBox(height: 15,),
-                    Text("Project Mobile Cloud Computing \nBara, Syuja, Zaky ",
-                      style: TextStyle(
-                          fontWeight: FontWeight.normal,
-                          fontSize: 16,
-                          color: AppColors.textColor
-                      ),),
-                  ],
+                const SizedBox(height: 84,),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Welcome to our",
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 28,
+                            color: AppColors.textColor
+                        ),),
+                      Text("Banboo Store",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 48,
+                            color: AppColors.textColor
+                        ),),
+                      Divider(),
+                      SizedBox(height: 15,),
+                      Text("Project Mobile Cloud Computing \nBara, Syuja, Zaky ",
+                        style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 16,
+                            color: AppColors.textColor
+                        ),),
+                    ],
+                  ),
                 ),
-              ),
 
-              Expanded(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Carousel(),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12.0),
-                          child: Text(
-                            "Continue with",
-                            style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Carousel(),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12.0),
+                            child: Text(
+                              "Continue with",
+                              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                        ),
-                        LoginButton(
-                          icon: const FaIcon(FontAwesomeIcons.user, color: Colors.black,),
-                          text: "Login with Username",
-                          backgroundColor: AppColors.primaryColor,
-                          textColor: AppColors.textColor,
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/login');
-                          },
-                        ),
-                        const Padding(
-                          padding: EdgeInsets.symmetric(vertical: 12),
-                          child: Row(
+                          LoginButton(
+                            icon: const FaIcon(FontAwesomeIcons.user, color: Colors.black,),
+                            text: "Login with Username",
+                            backgroundColor: AppColors.primaryColor,
+                            textColor: AppColors.textColor,
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/login');
+                            },
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.symmetric(vertical: 12),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Divider(
+                                    color: Colors.grey,
+                                    thickness: 1,
+                                    indent: 20,
+                                    endIndent: 20,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 1.0),
+                                  child: Text(
+                                    "Or",
+                                    style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    color: Colors.grey,
+                                    thickness: 1,
+                                    indent: 20,
+                                    endIndent: 20,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  thickness: 1,
-                                  indent: 20,
-                                  endIndent: 20,
-                                ),
+                              // Login Google
+                              IconButton(
+                                icon: Image.asset('lib/assets/images/ic_google.png', width: 32, height: 32,),
+                                onPressed: () => onLoginHandler(context),
                               ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 1.0),
-                                child: Text(
-                                  "Or",
-                                  style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Expanded(
-                                child: Divider(
-                                  color: Colors.grey,
-                                  thickness: 1,
-                                  indent: 20,
-                                  endIndent: 20,
-                                ),
+                              IconButton(
+                                icon: Image.asset('lib/assets/images/ic_facebook.png', width: 32, height: 32,),
+                                onPressed: () => onLoginHandler(context),
                               ),
                             ],
                           ),
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Login Google
-                            IconButton(
-                              icon: Image.asset('lib/assets/images/ic_google.png', width: 32, height: 32,),
-                              onPressed: () => onLoginHandler(context),
-                            ),
-                            IconButton(
-                              icon: Image.asset('lib/assets/images/ic_facebook.png', width: 32, height: 32,),
-                              onPressed: () => onLoginHandler(context),
-                            ),
-                          ],
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/register');
-                          },
-                          child: const Text("Don't have an account? Register here", style: TextStyle(color: Colors.white),),
-                        ),
-                      ],
-                    ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pushNamed(context, '/register');
+                            },
+                            child: const Text("Don't have an account? Register here", style: TextStyle(color: Colors.white),),
+                          ),
+                        ],
+                      ),
 
 
-                  ],
-                ),
-              )
+                    ],
+                  ),
+                )
 
-            ],
+              ],
+            ),
           ),
         ]
       ),

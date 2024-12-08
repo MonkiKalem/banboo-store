@@ -15,6 +15,7 @@ class ItemCardLayoutStaggeredGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return MasonryGridView.builder(
       shrinkWrap: true,
+      physics: BouncingScrollPhysics(),
       gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
       ),

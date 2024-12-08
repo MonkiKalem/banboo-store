@@ -25,6 +25,9 @@ class MyApp extends StatelessWidget {
           backgroundColor: AppColors.backgroundColor,
           centerTitle: true,
         ),
+        textSelectionTheme: const TextSelectionThemeData(
+          cursorColor: AppColors.primaryColor,
+        ),
       ),
       home: const SplashScreen(),
       routes: {

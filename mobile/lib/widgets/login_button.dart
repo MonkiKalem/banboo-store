@@ -21,7 +21,7 @@ class LoginButton extends StatelessWidget {
           maximumSize: const Size(345, 65),
           minimumSize: const Size(200, 50),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
         child: Row(

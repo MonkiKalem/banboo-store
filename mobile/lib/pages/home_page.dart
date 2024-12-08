@@ -4,6 +4,7 @@ import 'package:banboostore/pages/profile_page.dart';
 import 'package:banboostore/screens/onboarding_screen.dart';
 import 'package:banboostore/services/api_service.dart';
 import 'package:banboostore/widgets/banboo_card.dart';
+import 'package:banboostore/widgets/layout/carousel.dart';
 import 'package:banboostore/widgets/layout/item_card_layout_grid.dart';
 import 'package:banboostore/widgets/layout/item_card_layout_staggered_grid.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -31,7 +32,6 @@ class _HomePageState extends State<HomePage> {
     ProfilePage(), // Page for Profile
   ];
 
-
   final List<String> imgList = [
     'https://upload-os-bbs.hoyolab.com/upload/2023/11/14/369285726/28dc5c0e5c42688897d715128fa56f6f_2636221330479257776.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
     'https://upload-os-bbs.hoyolab.com/upload/2023/11/14/369285726/8fe0f2b73ade440b14e9d03f85b65737_8292970554535359034.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
@@ -41,6 +41,33 @@ class _HomePageState extends State<HomePage> {
   ];
 
   List<Banboo> banbooList = [
+    Banboo(
+      banbooId: "001",
+      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
+      name: "Amillion",
+      level: "2",
+      description: "ehehehehe",
+      elementId: "pyro",
+      price: 14500,
+    ),
+    Banboo(
+      banbooId: "001",
+      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
+      name: "Amillion",
+      level: "2",
+      description: "ehehehehe",
+      elementId: "pyro",
+      price: 14500,
+    ),
+    Banboo(
+      banbooId: "001",
+      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
+      name: "Amillion",
+      level: "2",
+      description: "ehehehehe",
+      elementId: "pyro",
+      price: 14500,
+    ),
     Banboo(
       banbooId: "001",
       imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
@@ -87,8 +114,7 @@ class _HomePageState extends State<HomePage> {
                 backgroundColor: AppColors.backgroundDarkColor,
                 leading: IconButton(
                   icon: const Icon(Icons.home),
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                 ),
                 actions: [
                   IconButton(
@@ -140,34 +166,9 @@ class _HomePageState extends State<HomePage> {
             children: [
               // caraousel images
               Container(
-
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 color: AppColors.secondaryColor,
-                child: CarouselSlider(
-                  options: CarouselOptions(
-                    height: 200.0,
-                    autoPlay: true,
-                    enlargeCenterPage: true,
-                    aspectRatio: 16 / 9,
-                    viewportFraction: 0.8,
-                  ),
-                  items: imgList.map((item) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: CachedNetworkImage(
-                        imageUrl: item,
-                        placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
+                child: Carousel(),
               ),
               const Text("Banboo List",
                   style: TextStyle(
@@ -175,15 +176,19 @@ class _HomePageState extends State<HomePage> {
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold)),
               Padding(
-                padding: const EdgeInsets.all(16.0),
-                child:
-                    ItemCardLayoutGrid(crossAxisCount: 2, banboos: banbooList),
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: ItemCardLayoutStaggeredGrid(
+                    crossAxisCount: 2, banboos: banbooList),
+              ),
+              Container(
+                height: 64,
+                margin: const EdgeInsets.symmetric(vertical: 40),
+                child: const Text("Banboo Store"),
               ),
             ],
           ),
         ),
       ),
-
     );
   }
 }

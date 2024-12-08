@@ -19,18 +19,21 @@ class _CarouselState extends State<Carousel> {
         autoPlay: true,
         enlargeCenterPage: true,
         aspectRatio: 16 / 9,
-        viewportFraction: 0.8,
+        viewportFraction: 0.75,
       ),
       items: ImagesLink.caraouselImgList.map((item) {
-        return ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: CachedNetworkImage(
-            imageUrl: item,
-            placeholder: (context, url) =>
-            const CircularProgressIndicator(),
-            errorWidget: (context, url, error) =>
-            const Icon(Icons.error),
-            fit: BoxFit.cover,
+        return Card(
+          elevation: 4,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: CachedNetworkImage(
+              imageUrl: item,
+              placeholder: (context, url) =>
+              const CircularProgressIndicator(),
+              errorWidget: (context, url, error) =>
+              const Icon(Icons.error),
+              fit: BoxFit.cover,
+            ),
           ),
         );
       }).toList(),
