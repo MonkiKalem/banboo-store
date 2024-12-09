@@ -6,7 +6,7 @@ const setupDatabase = async () => {
         // Create the database if it doesn't exist
         await queryAsync('CREATE DATABASE IF NOT EXISTS db_banboo');
         console.log('Database created or already exists.');
-
+        
         // Switch to the database
         await queryAsync('USE db_banboo');
         console.log('Using db_banboo.');
@@ -43,6 +43,7 @@ const setupDatabase = async () => {
                 description TEXT,
                 elementId INT,
                 level TINYINT NOT NULL,
+                imageUrl VARCHAR(500) NOT NULL,
                 createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (elementId) REFERENCES elements(elementId) ON DELETE SET NULL
@@ -80,6 +81,7 @@ const setupDatabase = async () => {
     } finally {
         connection.end();
     }
+    console.log('');
 };
 
 // Utility function to promisify connection.query

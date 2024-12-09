@@ -6,6 +6,16 @@ const SECRET_KEY = process.env.JWT_SECRET || 'my_secret_key';
 
 const router = express.Router();
 
+// Utility function to promisify connection.query  
+const queryAsync = (query, params = []) => {  
+  return new Promise((resolve, reject) => {  
+    connection.query(query, params, (err, results) => {  
+      if (err) return reject(err);  
+      resolve(results);  
+    });  
+  });  
+};  
+
 // Validate user input
 const validateUserInput = (email, password) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Basic email validation
@@ -15,85 +25,76 @@ const validateUserInput = (email, password) => {
 };
 
 // User login
-router.post('/login', (req, res) => {
-  const { email, password } = req.body;
+router.post('/login', async (req, res) => {  
+  const { email, password } = req.body;  
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required.' });
-  }
+  if (!email || !password) {  
+    return res.status(400).json({ message: 'Email and password are required.' });  
+  }  
 
-  connection.query('SELECT * FROM users WHERE email = ?', [email], (err, results) => {
-    if (err) {
-      console.error('Database error:', err.message);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
+  try {  
+    await queryAsync('USE db_banboo');  
+    const results = await queryAsync('SELECT * FROM users WHERE email = ?', [email]);  
 
-    if (results.length === 0) {
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
+    if (results.length === 0) {  
+      return res.status(401).json({ message: 'Invalid email or password' });  
+    }  
 
-    const user = results[0];
+    const user = results[0];  
 
-    bcrypt.compare(password, user.password, (err, isMatch) => {
-      if (err) {
-        console.error('Error comparing passwords:', err.message);
-        return res.status(500).json({ message: 'Internal server error' });
-      }
+    const isMatch = await bcrypt.compare(password, user.password);  
+    if (!isMatch) {  
+      return res.status(401).json({ message: 'Invalid email or password' });  
+    }  
 
-      if (!isMatch) {
-        return res.status(401).json({ message: 'Invalid email or password' });
-      }
+    // Generate JWT token  
+    const token = jwt.sign(  
+      { userId: user.userId, role: user.role },  
+      SECRET_KEY,  
+      { expiresIn: '1h' }  
+    );  
 
-      // Generate JWT token
-      const token = jwt.sign(
-        { userId: user.userId, role: user.role },
-        SECRET_KEY,
-        { expiresIn: '1h' }
-      );
-
-      res.json({
-        message: 'Login successful',
-        token,
-        user: { userId: user.userId, name: user.name, email: user.email, role: user.role },
-      });
-    });
-  });
-});
+    res.json({  
+      message: 'Login successful',  
+      token,  
+      user: { userId: user.userId, name: user.name, email: user.email, role: user.role },  
+    });  
+  } catch (err) {  
+    console.error('Database error:', err.message);  
+    res.status(500).json({ message: 'Internal server error' });  
+  }  
+});  
 
 // User registration
-router.post('/register', async (req, res) => {
-  const { name, email, password, role } = req.body;
+router.post('/register', async (req, res) => {  
+  const { name, email, password, role } = req.body;  
 
-  if (!name || !email || !password) {
-    return res.status(400).json({ message: 'Name, email, and password are required.' });
-  }
+  if (!name || !email || !password) {  
+    return res.status(400).json({ message: 'Name, email, and password are required.' });  
+  }  
 
-  const inputError = validateUserInput(email, password);
-  if (inputError) {
-    return res.status(400).json({ message: inputError });
-  }
+  const inputError = validateUserInput(email, password);  
+  if (inputError) {  
+    return res.status(400).json({ message: inputError });  
+  }  
 
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+  try {  
+    await queryAsync('USE db_banboo');  
+    const hashedPassword = await bcrypt.hash(password, 10);  
 
-    connection.query(
-      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
-      [name, email, hashedPassword, role || 'customer'],
-      (err, results) => {
-        if (err) {
-          if (err.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({ message: 'Email already exists.' });
-          }
-          console.error('Error creating user:', err.message);
-          return res.status(500).json({ message: 'Internal server error' });
-        }
-        res.status(201).json({ message: 'User registered successfully' });
-      }
-    );
-  } catch (err) {
-    console.error('Error hashing password:', err.message);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-});
+    await queryAsync(  
+      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',  
+      [name, email, hashedPassword, role || 'customer']  
+    );  
+
+    res.status(201).json({ message: 'User registered successfully' });  
+  } catch (err) {  
+    if (err.code === 'ER_DUP_ENTRY') {  
+      return res.status(409).json({ message: 'Email already exists.' });  
+    }  
+    console.error('Error creating user:', err.message);  
+    res.status(500).json({ message: 'Internal server error' });  
+  }  
+});  
 
 module.exports = router;
