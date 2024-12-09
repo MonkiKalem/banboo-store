@@ -1,6 +1,6 @@
 import 'package:banboostore/constants.dart';
 import 'package:banboostore/screens/onboarding_screen.dart';
-import 'package:banboostore/services/api_service.dart';
+import 'package:banboostore/services/user_api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -20,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    final token = await ApiService.getToken();
+    final token = await UserApiService.getToken();
 
     await Future.delayed(const Duration(seconds: 2));
 

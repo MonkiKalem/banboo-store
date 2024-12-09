@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../constants.dart';
-import '../services/api_service.dart';
+import '../services/user_api_service.dart';
 import '../widgets/background.dart';
 import '../widgets/custom_appbar.dart';
 
@@ -38,7 +38,7 @@ class _RegisterPageState extends State<RegisterPage> {
       // Automatically set the role to 'customer'
       const role = "customer";
 
-      final response = await ApiService.register(
+      final response = await UserApiService.register(
         _usernameController.text,
         _emailController.text,
         _passwordController.text,

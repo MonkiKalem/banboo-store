@@ -15,11 +15,11 @@ class ItemCardLayoutStaggeredGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return MasonryGridView.builder(
       shrinkWrap: true,
-      physics: BouncingScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
       ),
-      itemCount: banboos.length,  // Jumlah item yang akan ditampilkan
+      itemCount: banboos.length,
       itemBuilder: (context, index) => GestureDetector(
           onTap: () {
             showDialog(

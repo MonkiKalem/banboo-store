@@ -2,7 +2,7 @@ import 'package:banboostore/constants.dart';
 import 'package:banboostore/pages/cart_page.dart';
 import 'package:banboostore/pages/profile_page.dart';
 import 'package:banboostore/screens/onboarding_screen.dart';
-import 'package:banboostore/services/api_service.dart';
+import 'package:banboostore/services/user_api_service.dart';
 import 'package:banboostore/widgets/banboo_card.dart';
 import 'package:banboostore/widgets/layout/carousel.dart';
 import 'package:banboostore/widgets/layout/item_card_layout_grid.dart';
@@ -26,6 +26,8 @@ class HomePage extends StatefulWidget {
 // https://fastcdn.hoyoverse.com/content-v2/nap/114225/608830bc6382b73079821aed7b19fda8_8240430244310614598.jpg
 
 class _HomePageState extends State<HomePage> {
+  final ScrollController _scrollController = ScrollController();
+
   final List<Widget> _pages = [
     HomePage(), // Page for Home
     CartPage(), // Page for Cart
@@ -51,33 +53,6 @@ class _HomePageState extends State<HomePage> {
       price: 14500,
     ),
     Banboo(
-      banbooId: "001",
-      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
-      name: "Amillion",
-      level: "2",
-      description: "ehehehehe",
-      elementId: "pyro",
-      price: 14500,
-    ),
-    Banboo(
-      banbooId: "001",
-      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
-      name: "Amillion",
-      level: "2",
-      description: "ehehehehe",
-      elementId: "pyro",
-      price: 14500,
-    ),
-    Banboo(
-      banbooId: "001",
-      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
-      name: "Amillion",
-      level: "2",
-      description: "ehehehehe",
-      elementId: "pyro",
-      price: 14500,
-    ),
-    Banboo(
       banbooId: '002',
       name: 'Butler',
       price: 15000,
@@ -89,12 +64,40 @@ class _HomePageState extends State<HomePage> {
     Banboo(
       banbooId: '003',
       name: 'Sharkboo',
-      price: 150.0,
+      price: 150000,
       description: 'Another Banboo doll',
       elementId: 'B002',
       level: '6',
       imageUrl: 'https://rerollcdn.com/ZZZ/Bangboo/1/sharkboo.png',
     ),
+    Banboo(
+      banbooId: "001",
+      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
+      name: "Amillion",
+      level: "2",
+      description: "ehehehehe",
+      elementId: "pyro",
+      price: 14500,
+    ),
+    Banboo(
+      banbooId: "001",
+      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
+      name: "Amillion",
+      level: "2",
+      description: "ehehehehe",
+      elementId: "pyro",
+      price: 14500,
+    ),
+    Banboo(
+      banbooId: "001",
+      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
+      name: "Amillion",
+      level: "2",
+      description: "ehehehehe",
+      elementId: "pyro",
+      price: 14500,
+    ),
+
   ];
 
   @override
@@ -120,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                   IconButton(
                     icon: const Icon(Icons.logout),
                     onPressed: () async {
-                      await ApiService.logout();
+                      await UserApiService.logout();
                       Navigator.pushReplacementNamed(context, "/onboarding");
                     },
                   ),
@@ -165,16 +168,35 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             children: [
               // caraousel images
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                color: AppColors.secondaryColor,
-                child: Carousel(),
+              Stack(
+                children: [
+                  Container(
+                    height: 220,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          AppColors.backgroundColor,
+                          AppColors.backgroundGreyColor,
+                        ],
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                      ),
+                    ),
+                  ),
+                  Container(padding: const EdgeInsets.symmetric(vertical: 10),child: const Carousel())
+          ]
               ),
-              const Text("Banboo List",
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold)),
+
+              const Padding(
+                padding: EdgeInsets.only(top: 12.0),
+                child: Text("Our Banboo Products",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold)),
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: ItemCardLayoutStaggeredGrid(

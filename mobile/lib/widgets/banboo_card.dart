@@ -6,7 +6,7 @@ import 'package:banboostore/constants.dart';
 class BanbooCard extends StatelessWidget {
   final String banbooId;
   final String name;
-  final double price;
+  final int price;
   final String description;
   final String elementId;
   final String level;
@@ -75,7 +75,7 @@ class BanbooCard extends StatelessWidget {
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 12),
-            child: Text('\$${price.toStringAsFixed(2)}', style: const TextStyle(color: AppColors.primaryColor)),
+            child: Text('Rp$price', style: const TextStyle(color: AppColors.primaryColor, fontWeight: FontWeight.bold, fontSize: 18)),
           ),
         ],
       ),

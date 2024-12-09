@@ -14,7 +14,7 @@ class BanbooDetailDialog extends StatefulWidget {
 class _BanbooDetailDialogState extends State<BanbooDetailDialog> {
   // Variabel untuk jumlah barang dan total harga
   int quantity = 1;
-  double totalPrice = 0;
+  int totalPrice = 0;
 
   @override
   void initState() {

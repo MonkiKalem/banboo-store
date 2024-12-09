@@ -4,7 +4,7 @@ import 'package:banboostore/widgets/background.dart';
 import 'package:banboostore/widgets/custom_appbar.dart';
 import 'package:banboostore/widgets/layout/carousel.dart';
 import 'package:flutter/material.dart';
-import '../services/api_service.dart';
+import '../services/user_api_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
@@ -43,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
 
     try {
       // Call login API
-      final response = await ApiService.login(
+      final response = await UserApiService.login(
         _emailController.text,
         _passwordController.text,
       );

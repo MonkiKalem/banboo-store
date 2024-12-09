@@ -1,7 +1,7 @@
 class Banboo {
   final String banbooId;
   final String name;
-  final double price;
+  final int price;
   final String description;
   final String elementId;
   final String level;
@@ -16,6 +16,18 @@ class Banboo {
     required this.level,
     required this.imageUrl,
   });
+
+  factory Banboo.fromJson(Map<String, dynamic> json) {
+    return Banboo(
+      banbooId: json['id'].toString(),
+      name: json['name'],
+      description: json['description'],
+      price: json['price'],
+      level: json['level'].toString(),
+      elementId: json['elementId'],
+      imageUrl: json['imageUrl'],
+    );
+  }
 
   // Method untuk mengonversi objek ke Map (untuk keperluan JSON)
   Map<String, dynamic> toMap() {
@@ -49,9 +61,4 @@ class Banboo {
     return map.toString();
   }
 
-  // Optional: Method untuk mengonversi JSON string ke objek
-  factory Banboo.fromJson(String source) {
-    final map = Map<String, dynamic>.from(source as Map);
-    return Banboo.fromMap(map);
-  }
 }
