@@ -15,12 +15,11 @@ class UserApiService {
 
     if (response.statusCode == 200) {
       final responseBody = jsonDecode(response.body);
-
       _saveUserData(responseBody['token'], responseBody['user']);
-
       return responseBody;
     } else {
-      throw Exception("Failed to log in");
+      final responseBody = jsonDecode(response.body);
+      throw Exception(responseBody['message'] ?? "Failed to log in");
     }
   }
 
@@ -73,11 +72,13 @@ class UserApiService {
 
     if (response.statusCode == 201) {
       return jsonDecode(response.body);
-    } else if (response.statusCode == 409){
-      throw Exception("Failed to register: Email Already Existed");
-    }
-    else {
-      throw Exception("Failed to register : Internal Error");
+    } else {
+      final responseBody = jsonDecode(response.body);
+      if (response.statusCode == 409) {
+        throw Exception("Failed to register: ${responseBody['message'] ?? 'Email already exists.'}");
+      } else {
+        throw Exception(responseBody['message'] ?? "Failed to register: Internal Error");
+      }
     }
   }
 

@@ -1,3 +1,4 @@
+import 'package:banboostore/services/auth.dart';
 import 'package:banboostore/widgets/layout/carousel.dart';
 import 'package:banboostore/widgets/login_button.dart';
 import 'package:banboostore/constants.dart';
@@ -56,38 +57,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     super.dispose();
   }
 
-  // google login
-  Future<User?> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-
-      if (googleUser == null) {
-        // User canceled the sign-in
-        print("Google Sign-in canceled.");
-        return null;
-      }
-
-      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-
-      final UserCredential userCredential = await FirebaseAuth.instance.signInWithCredential(credential);
-      print("User signed in: ${userCredential.user?.displayName}");
-      return userCredential.user;
-    } catch (e) {
-      print("Error signing in with Google: $e");
-      return null;
-    }
-  }
-
   void onLoginHandler(BuildContext context) async {
     try {
-      User? user = await signInWithGoogle();
+      GoogleSignInAccount? user = await GoogleAuth.googleSignIn();
 
       if (user != null) {
+        final GoogleSignInAuthentication? googleAuth = await user.authentication;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Welcome ${user.displayName ?? user.email}!")),
+        );
+
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

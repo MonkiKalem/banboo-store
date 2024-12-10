@@ -1,5 +1,7 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.zzz.banboostore">
     <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:label="banboostore"
         android:name="${applicationName}"

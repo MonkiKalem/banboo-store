@@ -37,14 +37,14 @@ router.post('/login', async (req, res) => {
     const results = await queryAsync('SELECT * FROM users WHERE email = ?', [email]);  
 
     if (results.length === 0) {  
-      return res.status(401).json({ message: 'Invalid email or password' });  
+      return res.status(401).json({ message: 'Email not found' });  
     }  
 
     const user = results[0];  
 
     const isMatch = await bcrypt.compare(password, user.password);  
     if (!isMatch) {  
-      return res.status(401).json({ message: 'Invalid email or password' });  
+      return res.status(401).json({ message: 'Incorrect password' });  
     }  
 
     // Generate JWT token  
