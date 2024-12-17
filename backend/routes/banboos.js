@@ -19,11 +19,11 @@ router.use(async (req, res, next) => {
     next();
 });
 
-// Get all banboos with their elements
+// Get all banboos
 router.get('/', async (req, res) => {
     const query = `
         SELECT b.banbooId, b.name, b.price, b.description, b.level, b.imageUrl, b.createdAt, b.updatedAt,
-               e.name AS elementName, e.description AS elementDescription
+               e.elementId, e.name AS elementName, e.elementIcon AS elementIcon, e.description AS elementDescription
         FROM banboos b
         LEFT JOIN elements e ON b.elementId = e.elementId;
     `;
@@ -40,7 +40,7 @@ router.get('/:id', async (req, res) => {
     const { id } = req.params;
     const query = `
         SELECT b.banbooId, b.name, b.price, b.description, b.level, b.imageUrl, b.createdAt, b.updatedAt,
-               e.name AS elementName, e.description AS elementDescription
+            e.elementId, e.name AS elementName, e.elementIcon AS elementIcon, e.description AS elementDescription
         FROM banboos b
         LEFT JOIN elements e ON b.elementId = e.elementId
         WHERE b.banbooId = ?;
@@ -54,37 +54,39 @@ router.get('/:id', async (req, res) => {
     }
 });
 
-// Secure Routes
-router.post('/', authenticateToken, isAdmin, async (req, res) => {
-    const { name, price, description, elementId, level } = req.body;
+// adddmin add  banboo
+router.post('/add', authenticateToken, isAdmin, async (req, res) => {
+    const { name, price, description, elementId, level, imageUrl } = req.body;
     try {
-        const result = await queryAsync('INSERT INTO banboos (name, price, description, elementId, level) VALUES (?, ?, ?, ?, ?)', 
-            [name, price, description, elementId, level]);
-        res.status(201).json({ message: 'Banboo added successfully', banbooId: result.insertId });
+        const result = await queryAsync('INSERT INTO banboos (name, price, description, elementId, level, imageUrl) VALUES (?, ?, ?, ?, ?, ?)', 
+            [name, price, description, elementId, level, imageUrl]);
+        res.status(201).json({ message: 'Banboo added successfully',  status: 'success' ,banbooId: result.insertId });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-router.put('/:id', authenticateToken, isAdmin, async (req, res) => {
+// adddmin update banboo
+router.put('/update/:id', authenticateToken, isAdmin, async (req, res) => {
     const { id } = req.params;
-    const { name, price, description, elementId, level } = req.body;
+    const { name, price, description, elementId, level, imageUrl } = req.body;
     try {
-        await queryAsync('UPDATE banboos SET name = ?, price = ?, description = ?, elementId = ?, level = ? WHERE banbooId = ?',
-            [name, price, description, elementId, level, id]);
-        res.json({ message: 'Banboo updated successfully' });
+        await queryAsync('UPDATE banboos SET name = ?, price = ?, description = ?, elementId = ?, level = ?, imageUrl = ? WHERE banbooId = ?',
+            [name, price, description, elementId, level, imageUrl, id]);
+        res.json({ message: 'Banboo updated successfully', status: 'success' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
 // Admin role can delete banboo
-router.delete('/:id', authenticateToken, isAdmin, async (req, res) => {
+router.delete('/delete/:id', authenticateToken, isAdmin, async (req, res) => {
     const { id } = req.params;
     try {
         await queryAsync('DELETE FROM banboos WHERE banbooId = ?', [id]);
         res.json({ message: 'Banboo deleted successfully' });
     } catch (err) {
+
         res.status(500).json({ error: err.message });
     }
 });
