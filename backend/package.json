@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node database/scripts/setupDatabase.js && node database/scripts/seedElements.js && node database/scripts/seedBanboos.js && nodemon ./bin/www"  
+    "start": "node database/scripts/setupDatabase.js && node database/scripts/seedUserAdmin.js && node database/scripts/seedElements.js && node database/scripts/seedBanboos.js && nodemon ./bin/www"  
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

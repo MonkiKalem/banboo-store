@@ -46,15 +46,18 @@ dependencies:
   #for api url
   http: ^1.1.0
 
+  # Date format
+  intl: ^0.20.1
+
   #for login saved
   shared_preferences: ^2.3.3
-
-  # video player
-  youtube_player_flutter: ^9.1.1
 
   #carausel dependencies
   carousel_slider: ^5.0.0
   cached_network_image: ^3.4.1
+
+  # img picker
+  image_picker: ^1.1.2
 
   # bottom navbar
   flutter_floating_bottom_bar: ^1.2.1+1
@@ -69,6 +72,15 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.14.2
+
+flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
+    image_path: "lib/assets/images/app_icon.png"
+    min_sdk_android: 21
+    adaptive_icon_background: "#ffffff"
+    adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
