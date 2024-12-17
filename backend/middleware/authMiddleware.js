@@ -14,12 +14,14 @@ const authenticateToken = (req, res, next) => {
             return res.status(403).json({ message: 'Forbidden: Invalid token' });
         }
 
-        req.user = user; // Attach user info to request object
+        req.user = user;
+        console.log('Decoded User:', req.user);
         next();
     });
 };
 
 const isAdmin = (req, res, next) => {
+    console.log('User Role:', req.user.role); 
     if (req.user.role !== 'admin') {
         return res.status(403).json({ message: 'Forbidden: Admins only' });
     }
