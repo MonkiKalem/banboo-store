@@ -13,7 +13,7 @@ class Background extends StatelessWidget {
         child: CachedNetworkImage(
           imageUrl: imageUrl,
           placeholder: (context, url) =>
-          const CircularProgressIndicator(),
+          const Center(child: CircularProgressIndicator()),
           errorWidget: (context, url, error) =>
           const Icon(Icons.error),
           fit: BoxFit.cover,

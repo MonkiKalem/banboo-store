@@ -1,5 +1,5 @@
-import 'package:banboostore/constants.dart';
-import 'package:banboostore/pages/home_page.dart';
+import 'package:banboostore/pages/profiles/edit_profile_page.dart';
+import 'package:banboostore/utils/constants.dart';
 import 'package:banboostore/screens/home_screen.dart';
 import 'package:banboostore/pages/login_page.dart';
 import 'package:banboostore/pages/register_page.dart';
@@ -20,6 +20,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Banboo Store',
       theme: ThemeData(
+        progressIndicatorTheme: const ProgressIndicatorThemeData(
+          color: AppColors.secondaryColor,
+          circularTrackColor: AppColors.primaryColor
+        ),
         textTheme: GoogleFonts.poppinsTextTheme() ,
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.backgroundColor,
@@ -35,6 +39,8 @@ class MyApp extends StatelessWidget {
         '/login' : (context) => const LoginPage(),
         '/register' : (context) => const RegisterPage(),
         '/onboarding' : (context) => const OnboardingScreen(),
+
+        '/edit-profile' : (context) => const EditProfilePage(),
       },
     );
   }

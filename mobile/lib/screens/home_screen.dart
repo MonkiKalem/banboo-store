@@ -1,5 +1,7 @@
-import 'package:banboostore/constants.dart';
-import 'package:banboostore/pages/profile_page.dart';
+import 'package:banboostore/services/user_api_service.dart';
+import 'package:banboostore/utils/constants.dart';
+import 'package:banboostore/pages/dashboard_admin_page.dart';
+import 'package:banboostore/pages/profiles/profile_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
@@ -17,17 +19,21 @@ class HomePageWithBottomBar extends StatefulWidget {
 
 class _HomePageWithBottomBarState extends State<HomePageWithBottomBar> with TickerProviderStateMixin {
   late TabController _tabController;
-
-  final List<Widget> _pages = [
-    HomePage(), // Home Page
-    CartPage(), // Cart Page
-    ProfilePage(), // Profile Page
-  ];
+  String _userRole = "customer";
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    getUserRole();
+    _tabController = TabController(length: _userRole == "admin" ? 2 : 3, vsync: this);
+
+  }
+
+  Future<void> getUserRole() async {
+    _userRole = (await UserApiService.getUserRole())!;
+    setState(() {
+      _tabController = TabController(length: _userRole == "admin" ? 2 : 3, vsync: this);
+    });
   }
 
   @override
@@ -36,9 +42,13 @@ class _HomePageWithBottomBarState extends State<HomePageWithBottomBar> with Tick
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
+    final List<Widget> _pages = _userRole == "admin"
+        ? [DashboardAdminPage(), ProfilePage()]
+        : [ HomePage(), CartPage(), ProfilePage()
+    ];
+
     return Scaffold(
       body: BottomBar(
         fit: StackFit.expand,
@@ -82,8 +92,20 @@ class _HomePageWithBottomBarState extends State<HomePageWithBottomBar> with Tick
           indicatorPadding: const EdgeInsets.only(bottom: 6),
           labelColor: AppColors.secondaryColor, // Active tab text color
           unselectedLabelColor: Colors.white, // Inactive tab text color
-          tabs: const [
-            SizedBox(
+          tabs: _userRole == "admin"
+          ? [
+            const SizedBox(
+                height: 55,
+                width: 40,
+                child: Center(child: Icon(FontAwesomeIcons.idCard))
+            ),
+            const SizedBox(
+                height: 55,
+                width: 40,
+                child: Center(child: Icon(FontAwesomeIcons.user))
+            ),
+          ] : [
+            const SizedBox(
               height: 55,
                 width: 40,
                 child:  Center(child: Icon(FontAwesomeIcons.home))
@@ -91,9 +113,9 @@ class _HomePageWithBottomBarState extends State<HomePageWithBottomBar> with Tick
             SizedBox(
                 height: 55,
                 width: 40,
-                child:  Center(child: Icon(FontAwesomeIcons.shoppingCart))
+                child: _userRole == "admin" ? const Center(child: Icon(FontAwesomeIcons.idCard)) : const Center(child: Icon(FontAwesomeIcons.shoppingCart))
             ),
-            SizedBox(
+            const SizedBox(
                 height: 55,
                 width: 40,
                 child: Center(child: Icon(FontAwesomeIcons.user))
@@ -103,4 +125,6 @@ class _HomePageWithBottomBarState extends State<HomePageWithBottomBar> with Tick
       ),
     );
   }
+
+
 }

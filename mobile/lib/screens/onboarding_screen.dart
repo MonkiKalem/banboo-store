@@ -1,14 +1,11 @@
 import 'package:banboostore/services/auth.dart';
 import 'package:banboostore/widgets/layout/carousel.dart';
 import 'package:banboostore/widgets/login_button.dart';
-import 'package:banboostore/constants.dart';
+import 'package:banboostore/utils/constants.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 
 
 class OnboardingScreen extends StatefulWidget {
@@ -20,63 +17,75 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
 
-  late YoutubePlayerController _controller;
-
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _controller = YoutubePlayerController(
-      initialVideoId: 'KGOynaQoofc', // Ganti dengan ID video YouTube Anda
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        mute: false,
-        loop: true,
-        hideControls: true,
-        showLiveFullscreenButton: false
+  void onLoginHandler(BuildContext context) async {
+    // Show loading indicator
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Row(
+          children: [
+            CircularProgressIndicator(color: Colors.white),
+            SizedBox(width: 15),
+            Text('Signing in with Google...'),
+          ],
+        ),
+        duration: Duration(minutes: 1),
+        backgroundColor: Colors.blue,
       ),
     );
 
-    _controller.addListener(() {
-      if (_controller.value.isReady) {
-        print("Video is ready to play");
-      }
-
-      if (_controller.value.hasError) {
-        print('Error: ${_controller.value.errorCode}');
-      }
-    });
-
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void onLoginHandler(BuildContext context) async {
     try {
-      GoogleSignInAccount? user = await GoogleAuth.googleSignIn();
+      final result = await GoogleAuth.googleSignIn();
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
 
-      if (user != null) {
-        final GoogleSignInAuthentication? googleAuth = await user.authentication;
+      if (result['success']) {
 
+          String welcomeMessage = result['isNewUser']
+              ? "Welcome! Your account has been created."
+              : "Welcome back ${result['user'].displayName ??
+              result['user'].email}!";
+          // Show success SnackBar
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Welcome ${user.displayName ?? user.email}!")),
+          SnackBar(
+            content: Text(
+              welcomeMessage,
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.green,
+            duration: const Duration(seconds: 2),
+          ),
         );
 
-        Navigator.pushReplacementNamed(context, '/home');
+          await Future.delayed(const Duration(seconds: 3));
+          Navigator.pushReplacementNamed(context, '/home');
       } else {
+        // Show error SnackBar for login failure
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Google sign-in canceleed or failed')),
+          SnackBar(
+            content: Text(
+              result['message'] ?? 'Google sign-in failed',
+              style: const TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 2),
+          ),
         );
       }
     } catch (e) {
+      // Remove loading SnackBar
+      ScaffoldMessenger.of(context).removeCurrentSnackBar();
+
+      // Show detailed error SnackBar
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Login failed: $e')),
+        SnackBar(
+          content: Text(
+            'Login failed: $e',
+            style: const TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+          duration: const Duration(seconds: 3),
+        ),
       );
     }
   }
@@ -160,8 +169,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             ),
                           ),
                           LoginButton(
-                            icon: const FaIcon(FontAwesomeIcons.user, color: Colors.black,),
-                            text: "Login with Username",
+                            icon: "lib/assets/images/ic_google.png",
+                            text: "Login with Email",
                             backgroundColor: AppColors.primaryColor,
                             textColor: AppColors.textColor,
                             onPressed: () {
@@ -207,10 +216,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                                 icon: Image.asset('lib/assets/images/ic_google.png', width: 32, height: 32,),
                                 onPressed: () => onLoginHandler(context),
                               ),
-                              IconButton(
-                                icon: Image.asset('lib/assets/images/ic_facebook.png', width: 32, height: 32,),
-                                onPressed: () => onLoginHandler(context),
-                              ),
+
                             ],
                           ),
                           TextButton(

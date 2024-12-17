@@ -1,4 +1,4 @@
-import 'package:banboostore/constants.dart';
+import 'package:banboostore/utils/constants.dart';
 import 'package:banboostore/model/banboo.dart';
 import 'package:banboostore/widgets/background.dart';
 import 'package:banboostore/widgets/custom_appbar.dart';
@@ -21,7 +21,6 @@ class _LoginPageState extends State<LoginPage> {
   bool _passwordIsObscured = true;
 
   bool _isLoading = false;
-  bool _rememberMe = false;
 
   @override
   void initState() {
@@ -29,34 +28,40 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
+  }
+
   Future<void> _login() async {
     if (!_formKey.currentState!.validate()) return;
-
-    if (_emailController.text == "admin1@gmail.com" && _passwordController.text == "admin1") {
-      Navigator.pushReplacementNamed(context, '/home');
-      return;
-    }
 
     setState(() {
       _isLoading = true;
     });
 
     try {
-      // Call login API
-      final response = await UserApiService.login(
+      final response = await UserApiService.loginWithEmail(
         _emailController.text,
         _passwordController.text,
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Welcome ${response['user']['name']}!")),
-      );
+      if (response['success']) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(backgroundColor: Colors.green,content: Text("Welcome ${response['user']['name']}!")),
+        );
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(backgroundColor: Colors.red, content: Text("Login failed: ${response['message']}")),
 
-      // Navigate to the home or dashboard screen
-      Navigator.pushReplacementNamed(context, '/home');
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Login failed: ${e.toString()}")),
+        SnackBar(backgroundColor: Colors.red, content: Text("Login failed: ${e.toString()}")),
       );
     } finally {
       setState(() {
@@ -106,15 +111,16 @@ class _LoginPageState extends State<LoginPage> {
                           focusColor: AppColors.secondaryColor,
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            borderSide:
-                                const BorderSide(color: AppColors.secondaryColor),
+                            borderSide: const BorderSide(
+                                color: AppColors.secondaryColor),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                             borderSide: const BorderSide(color: Colors.white),
                           ),
                           label: const Text("Email"),
-                          labelStyle: const TextStyle(color: AppColors.textColor),
+                          labelStyle:
+                              const TextStyle(color: AppColors.textColor),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),
@@ -140,15 +146,16 @@ class _LoginPageState extends State<LoginPage> {
                           focusColor: AppColors.secondaryColor,
                           focusedBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
-                            borderSide:
-                                const BorderSide(color: AppColors.secondaryColor),
+                            borderSide: const BorderSide(
+                                color: AppColors.secondaryColor),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                             borderSide: const BorderSide(color: Colors.white),
                           ),
                           label: const Text("Password"),
-                          labelStyle: const TextStyle(color: AppColors.textColor),
+                          labelStyle:
+                              const TextStyle(color: AppColors.textColor),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(15.0),
                           ),

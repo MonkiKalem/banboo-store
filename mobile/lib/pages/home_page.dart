@@ -1,20 +1,11 @@
-import 'package:banboostore/constants.dart';
-import 'package:banboostore/pages/cart_page.dart';
-import 'package:banboostore/pages/profile_page.dart';
-import 'package:banboostore/screens/onboarding_screen.dart';
-import 'package:banboostore/services/user_api_service.dart';
-import 'package:banboostore/widgets/banboo_card.dart';
+import 'package:banboostore/utils/constants.dart';
 import 'package:banboostore/widgets/layout/carousel.dart';
-import 'package:banboostore/widgets/layout/item_card_layout_grid.dart';
 import 'package:banboostore/widgets/layout/item_card_layout_staggered_grid.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_floating_bottom_bar/flutter_floating_bottom_bar.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_layout_grid/flutter_layout_grid.dart';
 
 import '../model/banboo.dart';
+import '../services/banboo_api_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -23,82 +14,60 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-// https://fastcdn.hoyoverse.com/content-v2/nap/114225/608830bc6382b73079821aed7b19fda8_8240430244310614598.jpg
-
 class _HomePageState extends State<HomePage> {
-  final ScrollController _scrollController = ScrollController();
+  List<Banboo> banbooList = [];
+  List<Banboo> filteredList = [];
 
-  final List<Widget> _pages = [
-    HomePage(), // Page for Home
-    CartPage(), // Page for Cart
-    ProfilePage(), // Page for Profile
-  ];
+  bool _isLoading = true;
+  bool _isSearch = false;
+  String _errorMessage = '';
 
-  final List<String> imgList = [
-    'https://upload-os-bbs.hoyolab.com/upload/2023/11/14/369285726/28dc5c0e5c42688897d715128fa56f6f_2636221330479257776.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
-    'https://upload-os-bbs.hoyolab.com/upload/2023/11/14/369285726/8fe0f2b73ade440b14e9d03f85b65737_8292970554535359034.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
-    'https://upload-os-bbs.hoyolab.com/upload/2023/11/15/369285726/269eeb2766426c210e356a04bf927a69_4370142326493041399.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
-    'https://upload-os-bbs.hoyolab.com/upload/2024/07/14/369285726/50a1512638206da7680d2db0924f136f_478926785863762848.png?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
-    'https://upload-os-bbs.hoyolab.com/upload/2024/07/16/369285726/355f02a46b33e37ab95ff37165924889_862749925127952124.png?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70',
-  ];
+  String searchQuery = '';
+  String tempQuery ="";
 
-  List<Banboo> banbooList = [
-    Banboo(
-      banbooId: "001",
-      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
-      name: "Amillion",
-      level: "2",
-      description: "ehehehehe",
-      elementId: "pyro",
-      price: 14500,
-    ),
-    Banboo(
-      banbooId: '002',
-      name: 'Butler',
-      price: 15000,
-      description: 'Another Banboo dollawdaawdawaw',
-      elementId: 'Dark',
-      level: '4',
-      imageUrl: 'https://rerollcdn.com/ZZZ/Bangboo/1/butler.png',
-    ),
-    Banboo(
-      banbooId: '003',
-      name: 'Sharkboo',
-      price: 150000,
-      description: 'Another Banboo doll',
-      elementId: 'B002',
-      level: '6',
-      imageUrl: 'https://rerollcdn.com/ZZZ/Bangboo/1/sharkboo.png',
-    ),
-    Banboo(
-      banbooId: "001",
-      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
-      name: "Amillion",
-      level: "2",
-      description: "ehehehehe",
-      elementId: "pyro",
-      price: 14500,
-    ),
-    Banboo(
-      banbooId: "001",
-      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
-      name: "Amillion",
-      level: "2",
-      description: "ehehehehe",
-      elementId: "pyro",
-      price: 14500,
-    ),
-    Banboo(
-      banbooId: "001",
-      imageUrl: "https://rerollcdn.com/ZZZ/Bangboo/1/amillion.png",
-      name: "Amillion",
-      level: "2",
-      description: "ehehehehe",
-      elementId: "pyro",
-      price: 14500,
-    ),
+  @override
+  void initState() {
+    super.initState();
+    _fetchBanboos();
+  }
 
-  ];
+  Future<void> _fetchBanboos() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+
+      final fetchedBanboos = await BanbooApiService.getAllBanboos(context);
+
+      setState(() {
+        banbooList = fetchedBanboos;
+        filteredList = fetchedBanboos;
+        _isLoading = false;
+      });
+    } catch (e) {
+        _errorMessage = 'Failed to load Banboos: ${e.toString()}';
+        _isLoading = false;
+    }
+  }
+
+  void _filterBanboos(String query) {
+    if (query.isEmpty) {
+      setState(() {
+        filteredList = banbooList;
+        _isSearch = false;
+      });
+    } else {
+      setState(() {
+        tempQuery = query;
+        _isSearch = true;
+        filteredList = banbooList
+            .where((banboo) =>
+            banboo.name.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -109,25 +78,12 @@ class _HomePageState extends State<HomePage> {
           return <Widget>[
             SliverAppBar(
                 automaticallyImplyLeading: false,
-                expandedHeight: 300.0,
+                expandedHeight: 220.0,
                 collapsedHeight: 70,
                 floating: false,
                 pinned: true,
                 stretch: true,
                 backgroundColor: AppColors.backgroundDarkColor,
-                leading: IconButton(
-                  icon: const Icon(Icons.home),
-                  onPressed: () {},
-                ),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.logout),
-                    onPressed: () async {
-                      await UserApiService.logout();
-                      Navigator.pushReplacementNamed(context, "/onboarding");
-                    },
-                  ),
-                ],
                 flexibleSpace: FlexibleSpaceBar(
                   centerTitle: true,
                   collapseMode: CollapseMode.parallax,
@@ -145,14 +101,15 @@ class _HomePageState extends State<HomePage> {
                             "https://upload-os-bbs.hoyolab.com/upload/2023/11/15/369285726/fe6f361715d2e479c9333aa4eb56debd_5228699759752292298.jpg?x-oss-process=image%2Fresize%2Cs_1000%2Fauto-orient%2C0%2Finterlace%2C1%2Fformat%2Cwebp%2Fquality%2Cq_70",
                         fit: BoxFit.cover,
                         placeholder: (context, url) =>
-                            const CircularProgressIndicator(),
+                            const Center(child: CircularProgressIndicator()),
                       ),
                     ),
                     Container(
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           colors: [
-                            Colors.black.withOpacity(0.5),
+                            Colors.black.withOpacity(0.8),
+                            Colors.transparent,
                             Colors.transparent,
                           ],
                           begin: Alignment.bottomCenter,
@@ -162,55 +119,113 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ]),
                 )),
-          ];
-        },
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              // caraousel images
-              Stack(
-                children: [
-                  Container(
-                    height: 220,
-                    padding: const EdgeInsets.symmetric(vertical: 12),
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: _SearchBarDelegate(
+                child: Container(
 
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          AppColors.backgroundColor,
-                          AppColors.backgroundGreyColor,
-                        ],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                  padding: const EdgeInsets.symmetric( horizontal: 16,vertical: 8.0),
+                  child: TextField(
+                    onChanged: _filterBanboos,
+                    decoration: InputDecoration(
+                      hintText: 'Search Banboo...',
+                      prefixIcon: const Icon(Icons.search),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
                       ),
+                      filled: true,
+                      focusColor: AppColors.secondaryColor,
+                      fillColor: Colors.transparent,
                     ),
                   ),
-                  Container(padding: const EdgeInsets.symmetric(vertical: 10),child: const Carousel())
-          ]
+                ),
               ),
-
-              const Padding(
-                padding: EdgeInsets.only(top: 12.0),
-                child: Text("Our Banboo Products",
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold)),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: ItemCardLayoutStaggeredGrid(
-                    crossAxisCount: 2, banboos: banbooList),
-              ),
-              Container(
-                height: 64,
-                margin: const EdgeInsets.symmetric(vertical: 40),
-                child: const Text("Banboo Store"),
-              ),
-            ],
-          ),
-        ),
+            ),
+          ];
+        },
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : _errorMessage.isNotEmpty
+                ? Center(child: Text(_errorMessage))
+                : SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        if (!_isSearch) ... [
+                          // Carousel images
+                          Stack(children: [
+                            Container(
+                              height: 220,
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: [
+                                    AppColors.backgroundColor,
+                                    AppColors.backgroundGreyColor,
+                                  ],
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                ),
+                              ),
+                            ),
+                            Container(
+                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                child: const Carousel())
+                          ]),
+                        ],
+                        Padding(
+                          padding: const EdgeInsets.only(top: 12.0),
+                          child: Text(_isSearch ? "Search Results"  : "Our Banboo Products",
+                              style: const TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 22.0,
+                                  fontWeight: FontWeight.bold)),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: ItemCardLayoutStaggeredGrid(
+                              crossAxisCount: 2, banboos: filteredList
+                          ),
+                        ),
+                        Container(
+                          height: 64,
+                          margin: const EdgeInsets.symmetric(vertical: 40),
+                          child: Text(filteredList.isEmpty ? "$tempQuery Not Found" : "Banboo Store"),
+                        ),
+                      ],
+                    ),
+                  ),
       ),
     );
+  }
+@override
+  void dispose() {
+    super.dispose();
+  }
+
+}
+
+class _SearchBarDelegate extends SliverPersistentHeaderDelegate {
+  final Widget child;
+
+  _SearchBarDelegate({required this.child});
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
+    return Container(
+      color: Colors.white,
+      child: child,
+    );
+  }
+
+  @override
+  double get maxExtent => 70;
+
+  @override
+  double get minExtent => 70;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return true;
   }
 }

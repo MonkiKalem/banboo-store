@@ -1,9 +1,9 @@
-import 'package:banboostore/constants.dart';
+import 'package:banboostore/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginButton extends StatelessWidget {
-  final FaIcon icon;
+  final String icon;
   final String text;
   final Color backgroundColor;
   final Color textColor;
@@ -18,8 +18,8 @@ class LoginButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor: AppColors.secondaryColor,
           elevation: 2,
-          maximumSize: const Size(345, 65),
-          minimumSize: const Size(200, 50),
+          maximumSize: const Size(345, 70),
+          minimumSize: const Size(200, 55),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
@@ -27,7 +27,7 @@ class LoginButton extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            icon,
+          Image.asset('lib/assets/images/ic_email.png', width: 32, height: 32,),
             const SizedBox(width: 10,),
             Expanded(
               child: Text(

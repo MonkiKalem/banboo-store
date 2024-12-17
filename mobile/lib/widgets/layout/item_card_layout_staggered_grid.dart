@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../model/banboo.dart';
-import '../../pages/banboo_detail_popup.dart';
-import '../../widgets/banboo_card.dart';
+import '../../pages/dialog/banboo_detail_dialog.dart';
+import '../card/banboo_card.dart';
 
 class ItemCardLayoutStaggeredGrid extends StatelessWidget {
   const ItemCardLayoutStaggeredGrid({super.key, required this.crossAxisCount, required this.banboos});
@@ -29,14 +29,7 @@ class ItemCardLayoutStaggeredGrid extends StatelessWidget {
           },
           child: Hero(
             tag: 'banboo-${banboos[index].banbooId}',
-            child: BanbooCard(
-              banbooId: banboos[index].banbooId,
-              name: banboos[index].name,
-              price: banboos[index].price,
-              description: banboos[index].description,
-              elementId: banboos[index].elementId,
-              level: banboos[index].level,
-              imageUrl: banboos[index].imageUrl,
+            child: BanbooCard( banboo: banboos[index],
             ),
           ),
         ),

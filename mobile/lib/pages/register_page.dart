@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../constants.dart';
+import '../utils/constants.dart';
 import '../services/user_api_service.dart';
 import '../widgets/background.dart';
 import '../widgets/custom_appbar.dart';
@@ -20,6 +20,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool _isLoading = false;
   bool _passwordIsObscured = true;
   bool _confirmPasswordIsObscured = true;
+
   Future<void> _register() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -45,12 +46,16 @@ class _RegisterPageState extends State<RegisterPage> {
         role, // Pass the hidden role
       );
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Welcome ${response['user']['name']}! Registration successful.")),
-      );
-
-      // Navigate to login page
-      Navigator.pushReplacementNamed(context, '/login');
+      if (response['success']) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Welcome ${response['user']['name']}!")),
+        );
+        Navigator.pushReplacementNamed(context, '/login');
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("Login failed: ${response['message']}")),
+        );
+      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Registration failed: ${e.toString()}")),
