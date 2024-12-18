@@ -45,20 +45,20 @@ class _RegisterPageState extends State<RegisterPage> {
         _passwordController.text,
         role, // Pass the hidden role
       );
-
+      print(response);
       if (response['success']) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Welcome ${response['user']['name']}!")),
+          SnackBar(backgroundColor: Colors.green, content: Text("Welcome ${_usernameController.text}!")),
         );
         Navigator.pushReplacementNamed(context, '/login');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Login failed: ${response['message']}")),
+          SnackBar(backgroundColor: Colors.red, content: Text("Login failed: ${response['message']}")),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Registration failed: ${e.toString()}")),
+        SnackBar(backgroundColor: Colors.red, content: Text("Registration failed: ${e.toString()}")),
       );
     } finally {
       setState(() {
@@ -75,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
       body: Stack(children: [
         const Background(
           imageUrl:
-          "https://fastcdn.hoyoverse.com/content-v2/nap/102026/37198ce9c5ee13abb2c49f1bd1c3ca97_7846165079824928446.png",
+              "https://fastcdn.hoyoverse.com/content-v2/nap/102026/37198ce9c5ee13abb2c49f1bd1c3ca97_7846165079824928446.png",
         ),
         Container(
           height: double.infinity,
@@ -94,21 +94,22 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text("Create an account to get started", style:
-                TextStyle(fontSize: 16, color: AppColors.textColor),
-              ),
+                    const Text(
+                      "Create an account to get started",
+                      style:
+                          TextStyle(fontSize: 16, color: AppColors.textColor),
+                    ),
                     const SizedBox(height: 20),
                     // Username
                     TextFormField(
                       controller: _usernameController,
                       style: const TextStyle(color: AppColors.textColor),
-
                       decoration: InputDecoration(
                         focusColor: AppColors.secondaryColor,
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide:
-                          const BorderSide(color: AppColors.secondaryColor),
+                              const BorderSide(color: AppColors.secondaryColor),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -120,7 +121,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           borderRadius: BorderRadius.circular(15.0),
                         ),
                       ),
-
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your username';
@@ -138,7 +138,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide:
-                          const BorderSide(color: AppColors.secondaryColor),
+                              const BorderSide(color: AppColors.secondaryColor),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -172,7 +172,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide:
-                          const BorderSide(color: AppColors.secondaryColor),
+                              const BorderSide(color: AppColors.secondaryColor),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -217,7 +217,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
                           borderSide:
-                          const BorderSide(color: AppColors.secondaryColor),
+                              const BorderSide(color: AppColors.secondaryColor),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15.0),
@@ -236,12 +236,13 @@ class _RegisterPageState extends State<RegisterPage> {
                               : Icons.visibility_off),
                           onPressed: () {
                             setState(() {
-                              _confirmPasswordIsObscured = !_confirmPasswordIsObscured;
+                              _confirmPasswordIsObscured =
+                                  !_confirmPasswordIsObscured;
                             });
                           },
                         ),
                       ),
-                      validator:  (value) {
+                      validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please confirm your password';
                         }
@@ -261,8 +262,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     style: ElevatedButton.styleFrom(
                       elevation: 22,
                       backgroundColor: AppColors.secondaryColor,
-                      padding:
-                      const EdgeInsets.symmetric(horizontal: 48, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 48, vertical: 12),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(16.0),
                       ),
@@ -270,24 +271,20 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: _isLoading
                         ? const CircularProgressIndicator(color: Colors.white)
                         : const Text("Register",
-                        style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textColorDark)),
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textColorDark)),
                   ),
                 ],
               ),
-const SizedBox(height: 10,)
-
-
+              const SizedBox(
+                height: 10,
+              )
             ],
           ),
         ),
       ]),
-
-
-
-
     );
   }
 }

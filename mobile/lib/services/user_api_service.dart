@@ -108,18 +108,32 @@ class UserApiService {
         'name': username,
         'email': email,
         'password': password,
-        'role': role, // Always "customer"
+        'role': role,
       }),
     );
 
+    final responseBody = json.decode(response.body);
+
+
     if (response.statusCode == 201) {
-      return jsonDecode(response.body);
+      // return jsonDecode(response.body);
+      return {
+        'success': true,
+        'message': responseBody['message']
+      };
     } else {
-      final responseBody = jsonDecode(response.body);
       if (response.statusCode == 409) {
-        throw Exception("Failed to register: ${responseBody['message'] ?? 'Email already exists.'}");
+        return {
+          'success': false,
+          'message': "Failed to register: ${responseBody['message'] ?? 'Email already exists.'}"
+        };
+        // throw Exception("Failed to register: ${responseBody['message'] ?? 'Email already exists.'}");
       } else {
-        throw Exception(responseBody['message'] ?? "Failed to register: Internal Error");
+        return {
+          'success': false,
+          'message': 'An error occurred: ${responseBody['message']} ?? "Failed to register: Internal Error'
+        };
+        // throw Exception(responseBody['message'] ?? "Failed to register: Internal Error");
       }
     }
   }
