@@ -50,18 +50,25 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response['success']) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: Colors.green,content: Text("Welcome ${response['user']['name']}!")),
+          SnackBar(
+              backgroundColor: Colors.green,
+              content: Text("Welcome ${response['user']['name']}!"),
+          ),
+
         );
         Navigator.pushReplacementNamed(context, '/home');
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(backgroundColor: Colors.red, content: Text("Login failed: ${response['message']}")),
-
+          SnackBar(
+              backgroundColor: Colors.red,
+              content: Text("Login failed: ${response['message']}")),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(backgroundColor: Colors.red, content: Text("Login failed: ${e.toString()}")),
+        SnackBar(
+            backgroundColor: Colors.red,
+            content: Text("Login failed: ${e.toString()}")),
       );
     } finally {
       setState(() {
