@@ -62,7 +62,7 @@ class BanbooAdminCard extends StatelessWidget {
               fit: BoxFit.cover,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress == null) return child;
-                return const Center(child: CircularProgressIndicator(),);
+                return const Expanded(child: Center(child: CircularProgressIndicator()));
               },
               errorBuilder: (context, error, stackTrace) =>
                   Container(
