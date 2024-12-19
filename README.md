@@ -49,7 +49,7 @@ npm start
 
 ### Frontend Setup
 ```bash
-cd frontend
+cd mobile
 flutter pub get
 flutter run
 ```
@@ -111,14 +111,6 @@ flutter run
 
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## 📞 Support
-- Email: support@banboostore.com
-- Discord: [Banboo Store Community](https://discord.gg/banboostore)
-
-## 🌐 Project Links
-- [GitHub Repository](https://github.com/your-username/banboo-store)
-- [Project Documentation](https://docs.banboostore.com)
 
 ## 💖 Acknowledgments
 - Zenless Zone Zero Universe
