@@ -182,9 +182,8 @@ flutter run
 - Cloud Deployment
 
 ## 👥 Development Team
-- Zaky Satya Gumilang (2602206266)
-- Lalu Satria Syuja Makarim (2602114126)
-- Ida Bagus Swambara Suadnyana (2602124120)
+- Zaky Satya Gumilang
+- Lalu Satria Syuja Makarim
 
 ## 🛡️ Security Considerations
 - Encrypted Authentication
