@@ -79,11 +79,100 @@ flutter run
 
 ## 🖼️ Screenshots
 
+## 🖼️ Application Screenshots
+
+### 1. Authentication Flow
 <div align="center">
-    <h3>1. Login</h3>
-    <img src="screenshots/Login.png" alt="Tampilan Login">
-  <img src="screenshots/home_page.png" width="200">
-  <img src="screenshots/banboo_details.png" width="200">
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Splash Screen</h4>
+    <img src="screenshots/splash_screen.png" width="250" alt="Splash Screen">
+  </div>
+   <div style="display: inline-block; margin: 10px;">
+    <h4>Onboarding Screen</h4>
+    <img src="screenshots/onboarding_screen.png" width="250" alt="Onboarding Screen">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Login Page</h4>
+    <img src="screenshots/login_page.png" width="250" alt="Login Page">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Registration Page</h4>
+    <img src="screenshots/register_page.png" width="250" alt="Registration Page">
+  </div>
+</div>
+
+### 2. Home and Exploration
+<div align="center">
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Home Dashboard</h4>
+    <img src="screenshots/home_dashboard.png" width="250" alt="Home Dashboard">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Banboo Catalog</h4>
+    <img src="screenshots/banboo_catalog.png" width="250" alt="Banboo Catalog">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Banboo Details</h4>
+    <img src="screenshots/banboo_details.png" width="250" alt="Banboo Details">
+  </div>
+</div>
+
+### 3. User Interaction
+<div align="center">
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Shopping Cart</h4>
+    <img src="screenshots/shopping_cart.png" width="250" alt="Shopping Cart">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Order Success</h4>
+    <img src="screenshots/order_success.png" width="250" alt="Order Success">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Order History</h4>
+    <img src="screenshots/order_history.png" width="250" alt="Order History">
+  </div>
+</div>
+<div align="center">
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Order History Detail</h4>
+    <img src="screenshots/order_history_detail.png" width="250" alt="Order History Detail">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>User Profile</h4>
+    <img src="screenshots/user_profile.png" width="250" alt="User Profile">
+  </div>edit_user_profile
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Edit User Profile</h4>
+    <img src="screenshots/edit_user_profile.png" width="250" alt="Edit User Profile">
+  </div>
+</div>
+
+### 4. Admin Management
+<div align="center">
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Admin Dashboard</h4>
+    <img src="screenshots/admin_dashboard.png" width="250" alt="Admin Dashboard">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Add New Banboo</h4>
+    <img src="screenshots/add_banboo.png" width="250" alt="Add New Banboo">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Banboo Management</h4>
+    <img src="screenshots/banboo_management.png" width="250" alt="Banboo Management">
+  </div>
+</div>
+
+### 5. Additional Features
+<div align="center">
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Wishlist</h4>
+    <img src="screenshots/wishlist.png" width="250" alt="Wishlist">
+  </div>
+  <div style="display: inline-block; margin: 10px;">
+    <h4>Search Functionality</h4>
+    <img src="screenshots/search_page.png" width="250" alt="Search Functionality">
+  </div>
 </div>
 
 ## 🔮 Upcoming Features
