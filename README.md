@@ -80,7 +80,8 @@ flutter run
 ## 🖼️ Screenshots
 
 <div align="center">
-  <img src="screenshots/splash_screen.png" width="200">
+    <h3>1. Login</h3>
+    <img src="screenshots/Login.png" alt="Tampilan Login">
   <img src="screenshots/home_page.png" width="200">
   <img src="screenshots/banboo_details.png" width="200">
 </div>
