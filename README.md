@@ -36,7 +36,7 @@ Banboo Store is an innovative digital marketplace application inspired by the Ze
 
 ### Clone Repository
 ```bash
-git clone https://github.com/your-username/banboo-store.git
+git clone [https://github.com/zakysatya/banboo-store.git]
 cd banboo-store
 ```
 
