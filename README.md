@@ -83,7 +83,7 @@ flutter run
 
 ### 1. Authentication Flow
 <div align="center">
-  <div style="display: inline-block; margin: 10px;">
+  <div display: flex; justify-content: center; gap: 10px; style="display: inline-block; margin: 10px;">
     <h4>Splash Screen</h4>
     <img src="screenshots/splash_screen.png" width="250" alt="Splash Screen">
   </div>
